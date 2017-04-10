@@ -79,22 +79,46 @@ bool Toy::Change()
 	//ファイル名
 	std::string filename;
 
-	//ランダムのおもちゃに決定
-	switch (rand() % 4)
+	//成功していた場合
+	if (this->getTag() != 0)
 	{
-	case 0:
-		filename = "toy1.png";
-		break;
-	case 1:
-		filename = "toy2.png";
-		break;
-	case 2:
-		filename = "toy3.png";
-		break;
-	case 3:
-		filename = "toy4.png";
-		break;
+		//ランダムのおもちゃに決定
+		switch (rand() % 4)
+		{
+		case 0:
+			filename = "toy1.png";
+			break;
+		case 1:
+			filename = "toy2.png";
+			break;
+		case 2:
+			filename = "toy3.png";
+			break;
+		case 3:
+			filename = "toy4.png";
+			break;
+		}
 	}
+	else
+	{
+		//ランダムのゴミ画像に決定
+		switch (rand() % 4)
+		{
+		case 0:
+			filename = "trash1.png";
+			break;
+		case 1:
+			filename = "trash2.png";
+			break;
+		case 2:
+			filename = "trash3.png";
+			break;
+		case 3:
+			filename = "trash4.png";
+			break;
+		}
+	}
+	
 
 	if (!Sprite::initWithFile(filename))
 	{
@@ -111,7 +135,7 @@ bool Toy::Change()
 		this->setColor(Color3B(0x00, 0x00, 0xff));
 		break;
 	case 3:
-		this->setColor(Color3B(0xff, 0xff, 0x00));
+		this->setColor(Color3B(0x00, 0xff, 0x00));
 		break;
 	case 4:
 		this->setColor(Color3B(0xff, 0xff, 0x00));
@@ -125,12 +149,12 @@ bool Toy::Change()
 void Toy::OnConveyor()
 {
 	//移動
-	MoveBy* conveyor = MoveBy::create(3.0f, Vec2(0.0f, 1000.0f));
+	MoveBy* conveyor = MoveBy::create(3.0f, Vec2(1000.0f, 0.0f));
 	this->runAction(conveyor);
 
 	//作り直す
 	//this->addChild(create(this->getTag()));
-	int tag = this->getTag() - 1;
+	//int tag = this->getTag() - 1;
 
 	//Toy* toy = Toy::create(tag);
 	
@@ -141,6 +165,9 @@ void Toy::OnConveyor()
 	//return toy;
 }
 
+//失敗したときタグを0にする
+//引数なし
+//戻り値なし
 void Toy::Failed()
 {
 	this->setTag(0);
