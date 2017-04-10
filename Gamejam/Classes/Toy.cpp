@@ -6,16 +6,9 @@
 
 USING_NS_CC;
 
-Toy::Toy()
-{
-	
-}
-
-
-Toy::~Toy()
-{
-}
-
+//初期化
+//引数 レーン
+//戻り値bool
 bool Toy::init(int lanenum)
 {
 	//ファイル名
@@ -27,22 +20,22 @@ bool Toy::init(int lanenum)
 	case 0:
 		filename = "box1.png";
 		this->setTag(1);
-		this->setPosition(Vec2(480 -16- 64, 64));
+		this->setPosition(Vec2(480 + (64 * lanenum) , 64));
 		break;
 	case 1:
 		filename = "box2.png";
 		this->setTag(2);
-		this->setPosition(Vec2(480 - 16 - 32, 64));
+		this->setPosition(Vec2(480 + (64 * lanenum), 64));
 		break;
 	case 2:
 		filename = "box3.png";
 		this->setTag(3);
-		this->setPosition(Vec2(480 + 16 + 32, 64));
+		this->setPosition(Vec2(480 + (64 * lanenum), 64));
 		break;
 	case 3:
 		filename = "box4.png";
 		this->setTag(4);
-		this->setPosition(Vec2(480 + 16 + 64, 64));
+		this->setPosition(Vec2(480 + (64 * lanenum), 64));
 		break;
 	}
 	
@@ -50,15 +43,12 @@ bool Toy::init(int lanenum)
 	{
 		return false;
 	}
-
-	this->Sprite::initWithFile(filename);
-
-	//Sprite::addChild
-
-	//this->setTag()
 	
 }
 
+//生成
+//引数 レーン
+//戻り値bool
 Toy* Toy::create(int lanenum)
 {
 	Toy *toy = new (std::nothrow) Toy();
@@ -71,13 +61,19 @@ Toy* Toy::create(int lanenum)
 	return nullptr;
 }
 
+//発射
+//引数なし
+//戻り値なし
 void Toy::Shoot()
 {
 	MoveBy* shot = MoveBy::create(1.0f, Vec2(0.0f, 640.0f));
 	this->runAction(shot);
 }
 
-void Toy::Change()
+//画像変更
+//引数なし
+//戻り値なし
+bool Toy::Change()
 {
 	//state = 1;
 	//ファイル名
@@ -100,7 +96,10 @@ void Toy::Change()
 		break;
 	}
 
-	this->Sprite::initWithFile(filename);
+	if (!Sprite::initWithFile(filename))
+	{
+		return false;
+	}
 
 	//タグ情報から色を決定
 	switch (this->getTag())
@@ -120,9 +119,29 @@ void Toy::Change()
 	}
 }
 
+//コンベアの上に乗ったときの処理
+//引数なし
+//戻り値なし
 void Toy::OnConveyor()
 {
-	MoveBy* conveyor = MoveBy::create(3.0f, Vec2(400.0f, 0.0f));
+	//移動
+	MoveBy* conveyor = MoveBy::create(3.0f, Vec2(0.0f, 1000.0f));
 	this->runAction(conveyor);
-	create(this->getTag());
+
+	//作り直す
+	//this->addChild(create(this->getTag()));
+	int tag = this->getTag() - 1;
+
+	//Toy* toy = Toy::create(tag);
+	
+	//getParent()->addChild(toy);
+
+	//this->removeFromParentAndCleanup(true);
+
+	//return toy;
+}
+
+void Toy::Failed()
+{
+	this->setTag(0);
 }

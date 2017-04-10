@@ -10,15 +10,12 @@ class Toy : public cocos2d::Sprite
 {
 private:
 	bool init(int lanenum);
-	static Toy* create(int lanenum);
-	bool state;
-	
 
 public:
-	Toy();
-	~Toy();
+	static Toy* create(int lanenum);
 	void Shoot();
-	void Change();
+	bool Change();
 	void OnConveyor();
+	void Failed();
 };
 
