@@ -48,22 +48,15 @@ void LevelSystem::set_level(int lv, int count, float beatspd)
 
 
 // レベルを変動する関数
-void LevelSystem::fluctuation_level(int lv)
+void LevelSystem::up_level()
 {
-	// レベルアップ
-	if (/*連続成功数 == 5 &&*/ lv < 5)
-	{
-		m_level_info[lv] = m_level_info[lv + 1];
+	m_level++;
+}
 
-		/*連続成功数をリセット*/
-	}
-	// レベルダウン
-	else if (/*成功判定 == false &&*/ lv > 1)
-	{
-		m_level_info[lv] = m_level_info[lv - 1];
-		
-		/*連続成功数をリセット*/
-	}
+// レベルを変動する関数
+void LevelSystem::down_level()
+{
+	m_level--;
 }
 
 

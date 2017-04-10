@@ -20,12 +20,13 @@ class LevelSystem : public cocos2d::Node
 		int m_level;				// レベル
 
 	public:
-		LevelSystem * create();		// creat関数
-		bool LevelSystem::init();	// init関数
+		static LevelSystem * create();		// creat関数
+		bool LevelSystem::init();			// init関数
 		
 		void set_level(int lv, int count, float beatspd);	// レベルの情報をセットする関数
-		void fluctuation_level(int lv);						// レベルを変動する関数
-		
+		void up_level();									// レベルを上げる関数
+		void down_level();									// レベルを下げる関数
+
 		LEVEL get_level() const;							// 現在のレベルを取得する関数
 };
 #endif
