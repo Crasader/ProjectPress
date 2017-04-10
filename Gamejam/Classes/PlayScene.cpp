@@ -52,7 +52,7 @@ bool PlayScene::init()
 void PlayScene::update(float delta)
 {
 	// 3•ª
-	if (m_timecnt < 10800)
+	if (m_timecnt < 180)
 	{
 		m_timecnt++;
 	}
