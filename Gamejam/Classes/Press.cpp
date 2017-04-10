@@ -81,23 +81,57 @@ void Press::pressBeat(float delta)
 		//this->runAction(moveby2);
 		this->runAction(PressAction);
 
-		//	おもちゃの素との当たり判定をcheckする
+		//	おもちゃの素との当たり判定がtrueなら
+
+		Node* parent = this->getParent();
+
+		Vector<Node*> myVector = parent->getChildren();
+
+		//Vector<Node*>::iterator myIterator;
+		Vector<Node*>::iterator myIterator;
+
+		//	子スプライトの数だけfor	ベクトルの順に
+		for (myIterator = myVector.begin(); myIterator != myVector.end(); ++myIterator)
+		{
+			
+			//	flyをNode*からFly*に
+			auto toy = (Toy*)*myIterator;
+
+			//	セットタグしてあればおもちゃの素
+			if(toy->getTag() >= 1)
+			{
+				//	おもちゃの素と当たったらtrue
+				if (toyCheck(toy))
+				{
+					//	色があっていたらtrue
+					if (this->Collar == toy->getTag())
+					{
+						//	おもちゃになる
+						toy->Change();
+					}
+					else
+					{
+						//	失敗品に変える
+						toy->Failed();
+						toy->Change();
+					}
+				}
+			}
+		}
+
+		
 
 		//	おもちゃの素の変換する
 
-		if (Level->get_level() == 2)
-		{
-			int a = 1999;
-		}
 
 		//	test 連続成功回数を増やす
 		SuccessiveSuccess++;
 		log("Success:%d", SuccessiveSuccess);
+		//	レベルがマックスなら更新しない
 
 		//	test 連続成功回数が必要数になったらレベルアップしてリセット
 		if (SuccessiveSuccess == Level->get_level_info().count)
 		{
-
 			//	レベルアップ
 			Level->up_level();
 			//	連続成功回数カウントリセット
@@ -109,6 +143,7 @@ void Press::pressBeat(float delta)
 			//	最新の拍速をもとにプレス機の処理のスケジュールを有効化する
 			this->schedule(CC_CALLBACK_1(Press::pressBeat, this), BeatSpeed, "beat");
 		}
+	
 
 
 
@@ -164,7 +199,6 @@ bool Press::init(LevelSystem* level)
 	//	プレス機の初期位置など
 	this->setOpacity(255 * Opacity);
 
-
 	return true;
 }
 
@@ -215,7 +249,13 @@ void Press::levelCheck()
 }
 
 //	プレス機をおもちゃの素との当たり判定　当たっていたらtrue
-//bool Press::toyCheck()
-//{
-//
-//}
+bool Press::toyCheck(Toy* toy)
+{
+
+	if (toy->getPosition().y < this->getPosition().y + 50 && toy->getPosition().y > this->getPosition().y - 50)	//おもちゃの素があったら
+	{
+
+		return true;
+	}
+	return false;
+}
