@@ -41,9 +41,10 @@ bool LevelSystem::init()
 // レベルの情報をセットする関数
 void LevelSystem::set_level(int lv, int count, float beatspd)
 {
-	m_level = lv;
+	m_level = lv - 1;
 	m_level_info[m_level].count = count;
 	m_level_info[m_level].press_time = beatspd;
+	m_level = 1;
 }
 
 
@@ -60,8 +61,16 @@ void LevelSystem::down_level()
 }
 
 
-// 現在のレベルを取得する関数
-LEVEL LevelSystem::get_level() const
+
+// 現在のレベルのを取得する関数
+int LevelSystem::get_level() const
+{
+	return m_level;
+}
+
+
+// 現在のレベルの情報を取得する関数
+LEVEL LevelSystem::get_level_info() const
 {
 	return m_level_info[m_level];
 }
