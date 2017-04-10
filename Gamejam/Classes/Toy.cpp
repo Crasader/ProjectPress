@@ -20,25 +20,27 @@ bool Toy::init(int lanenum)
 	case 0:
 		filename = "box1.png";
 		this->setTag(1);
-		this->setPosition(Vec2(480 + (64 * lanenum) , 64));
+		this->setPosition(Vec2(480 + (64 * lanenum) , 96));
 		break;
 	case 1:
 		filename = "box2.png";
 		this->setTag(2);
-		this->setPosition(Vec2(480 + (64 * lanenum), 64));
+		this->setPosition(Vec2(480 + (64 * lanenum), 96));
 		break;
 	case 2:
 		filename = "box3.png";
 		this->setTag(3);
-		this->setPosition(Vec2(480 + (64 * lanenum), 64));
+		this->setPosition(Vec2(480 + (64 * lanenum), 96));
 		break;
 	case 3:
 		filename = "box4.png";
 		this->setTag(4);
-		this->setPosition(Vec2(480 + (64 * lanenum), 64));
+		this->setPosition(Vec2(480 + (64 * lanenum), 96));
 		break;
 	}
 	
+	this->setScale(2.0f);
+
 	if (!Sprite::initWithFile(filename))
 	{
 		return false;
