@@ -106,11 +106,19 @@ void Press::pressBeat(float delta)
 					//	F‚ª‚ ‚Á‚Ä‚¢‚½‚çtrue
 					if (this->Collar == toy->getTag())
 					{
+						//	¬Œ÷‚ð‚Ì‰¹‚ð–Â‚ç‚·
+						
+						int id = AudioEngine::play2d("se_atari.ogg");
+						AudioEngine::setVolume(id,3.0f);
+
 						//	‚¨‚à‚¿‚á‚É‚È‚é
 						toy->Change();
 					}
 					else
 					{
+						//	Ž¸”s‚Ì‰¹‚ð–Â‚ç‚·
+						int id = AudioEngine::play2d("se_hazure.ogg");
+						AudioEngine::setVolume(id, 3.0f);
 						//	Ž¸”s•i‚É•Ï‚¦‚é
 						toy->Failed();
 						toy->Change();
@@ -178,6 +186,8 @@ bool Press::init(LevelSystem* level)
 	//	Ž–‘O“Ç‚Ýž‚Ý
 	AudioEngine::preload("button01a.ogg");
 	AudioEngine::preload("select01.ogg");
+	AudioEngine::preload("se_atari.ogg");
+	AudioEngine::preload("se_hazure.ogg");
 
 	//	ƒŒƒxƒ‹‚Ì‰Šú‰»
 	Level = level;
@@ -252,7 +262,7 @@ void Press::levelCheck()
 bool Press::toyCheck(Toy* toy)
 {
 
-	if (toy->getPosition().y < this->getPosition().y + 50 && toy->getPosition().y > this->getPosition().y - 50)	//‚¨‚à‚¿‚á‚Ì‘f‚ª‚ ‚Á‚½‚ç
+	if (toy->getPosition().y < this->getPosition().y + 20 && toy->getPosition().y > this->getPosition().y - 70)	//‚¨‚à‚¿‚á‚Ì‘f‚ª‚ ‚Á‚½‚ç
 	{
 
 		return true;
