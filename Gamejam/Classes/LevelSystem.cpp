@@ -6,14 +6,36 @@ USING_NS_CC;
 
 //using namespace cocostudio::timeline;
 
-LevelSystem::LevelSystem()
+// creat関数
+LevelSystem* LevelSystem::create()
 {
-
+	LevelSystem *pRet = new(std::nothrow) LevelSystem(); 
+	if (pRet && pRet->init()) 
+	{ 
+		pRet->autorelease(); 
+		return pRet; 
+	} 
+	else 
+	{ 
+		delete pRet; 
+		pRet = nullptr; 
+		return nullptr; 
+	} 
 }
 
-LevelSystem::~LevelSystem()
+// init関数
+bool LevelSystem::init()
 {
+	if (!Node::init())
+	{
+		return false;
+	}
 
+	m_level_info[4] = { 0 };
+
+	m_level = 0;
+
+	return true;
 }
 
 // レベルの情報をセットする関数
