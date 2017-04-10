@@ -14,6 +14,10 @@ bool Toy::init(int lanenum)
 	//ファイル名
 	std::string filename;
 
+	velocity.x = 0.0f;
+	velocity.y = 10.0f;
+
+
 	//画像の種類、場所を決定
 	switch (lanenum)
 	{
@@ -40,6 +44,7 @@ bool Toy::init(int lanenum)
 	}
 	
 	this->setScale(2.0f);
+	canShoot = true;
 
 	if (!Sprite::initWithFile(filename))
 	{
@@ -63,13 +68,94 @@ Toy* Toy::create(int lanenum)
 	return nullptr;
 }
 
+//初期化
+//引数 レーン
+//戻り値bool
+bool Toy::initSpawn(int lanenum)
+{
+	//ファイル名
+	std::string filename;
+
+	velocity.x = 0.0f;
+	velocity.y = 10.0f;
+
+	//画像の種類、場所を決定
+	switch (lanenum)
+	{
+	case 0:
+		filename = "box1.png";
+		this->setTag(1);
+		this->setPosition(Vec2(480 + (64 * lanenum), -96));
+		break;
+	case 1:
+		filename = "box2.png";
+		this->setTag(2);
+		this->setPosition(Vec2(480 + (64 * lanenum), -96));
+		break;
+	case 2:
+		filename = "box3.png";
+		this->setTag(3);
+		this->setPosition(Vec2(480 + (64 * lanenum), -96));
+		break;
+	case 3:
+		filename = "box4.png";
+		this->setTag(4);
+		this->setPosition(Vec2(480 + (64 * lanenum), -96));
+		break;
+	}
+
+	canShoot = false;
+	this->setScale(2.0f);
+	MoveBy* move = MoveBy::create(2.0f, Vec2(0, 96 * 2));
+	this->runAction(move);
+
+	if (!Sprite::initWithFile(filename))
+	{
+		return false;
+	}
+
+}
+
+//生成
+//引数 レーン
+//戻り値bool
+Toy* Toy::Spawn(int lanenum)
+{
+	Toy *toy = new (std::nothrow) Toy();
+	if (toy && toy->initSpawn(lanenum))
+	{
+		toy->autorelease();
+		return toy;
+	}
+	CC_SAFE_DELETE(toy);
+	return nullptr;
+}
+
+int Toy::difference(int x, int y)
+{
+	return x > y ? x - y : y - x;
+}
+
 //発射
 //引数なし
 //戻り値なし
 void Toy::Shoot()
 {
-	MoveBy* shot = MoveBy::create(1.0f, Vec2(0.0f, 640.0f));
-	this->runAction(shot);
+	if (canShoot)
+	{
+		//MoveBy* shot = MoveBy::create(1.0f, Vec2(0.0f, 640.0f));
+		Size bgSize = Director::sharedDirector()->getWinSize();
+		MoveBy* move = MoveBy::create(0.1, velocity);
+
+		int countx = (difference(bgSize.width, this->getPosition().x)) / (velocity.x);
+		int county = (difference(bgSize.height, this->getPosition().y)) / (velocity.y);
+
+		Repeat *repeat = Repeat::create(move, countx < county ? countx : county);
+
+		this->runAction(repeat);
+		canShoot = false;
+	}
+
 }
 
 //画像変更
@@ -173,4 +259,18 @@ void Toy::OnConveyor()
 void Toy::Failed()
 {
 	this->setTag(0);
+}
+
+//場所を確認して発射ができるか確認
+void Toy::CheckPosition()
+{
+	if (this->getPosition().y >= 96.0f)
+	{
+		if (this->getPosition().y > 96.0f)
+		{
+			return;
+		}
+		this->setPositionY(96.0f);
+		canShoot = true;
+	}
 }
