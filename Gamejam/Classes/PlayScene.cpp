@@ -31,11 +31,15 @@ bool PlayScene::init()
 	auto rootNode = CSLoader::createNode("MainScene.csb");
 	addChild(rootNode);
 
-	
+	for (int i = 0; i < 4; i++)
+	{
+		m_toy[i] = Toy::create(i);
+		this->addChild(m_toy[i]);
+	}
 
-	Toy* mato = Toy::create(0);
+
 	//mato->setPosition(Vec2(880.0f, 320.0f));
-	this->addChild(mato);
+	//this->addChild(mato);
 
 	// 毎フレーム更新を有効化
 	scheduleUpdate();
@@ -59,6 +63,15 @@ void PlayScene::update(float delta)
 		// 次のシーンに移行
 		_director->replaceScene(nextScene);
 	}
+
+	// 一定の場所に来たら発射可能
+	if (m_toy[0]->getPosition() == Vec2(0.0f, 500.0f))
+	{
+		m_toy[0] = Toy::create(0);
+		this->addChild(m_toy[0]);
+		m_hit = true;
+	}
+	
 }
 
 bool PlayScene::onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * unused_event)
@@ -66,9 +79,13 @@ bool PlayScene::onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * unused_eve
 
 	Vec2 touch_pos = touch->getLocation();
 
-	//Rect rect_spr = mato->getBoundingBox();
+	//m_toy[0] = Toy::create(0);
+	//this->addChild(m_toy[0]);
 
-	//bool hit = rect_spr.containsPoint(touch_pos);
+	Rect rect_spr = m_toy[0]->getBoundingBox();
+
+	m_hit = rect_spr.containsPoint(touch_pos);
+
 
 	return true;
 }
@@ -81,17 +98,28 @@ void PlayScene::onTouchMoved(cocos2d::Touch * touch, cocos2d::Event * unused_eve
 	prevpos = touch->getPreviousLocation();
 	currentpos = touch->getLocation(); //get previous positon
 
+	double distance = ccpDistance(currentpos, prevpos);
+	if (distance>3)
+	{ //スワイプ最新二点間距離３以上
+		if (m_hit == 1)
+		{
+			MoveBy* move = MoveBy::create(3.0f, Vec2(0.0f, 700.0f));
+			m_toy[0]->runAction(move);
+			m_hit = false;
+			m_flag = true;
+		}
+
+		log("swiped?n"); //check
+
+	}
+
+
 	return;
 }
 
 // タップが終了したときの処理
 void PlayScene::onTouchEnded(Touch* touch, Event* unused_event)
 {
-	double distance = ccpDistance(currentpos, prevpos);
-	if (distance>3) 
-	{ //スワイプ最新二点間距離３以上
-		log("swiped?n"); //check
 
-	}
 	return;
 }
