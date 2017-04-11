@@ -41,8 +41,8 @@ void Press::pressBeat(float delta)
 		//	１拍目　色を決める
 		log("Beat:%d", Beat);
 		//	ランダムな１－４が出る
-		Collar = setRand4();
-		log("Collar:%d", Collar);
+		Color = setRand4();
+		log("Collar:%d", Color);
 
 		//	途中で拍速が変更されたかどうか調べるために1拍目の拍速を保存する
 		fastBeat = BeatSpeed;
@@ -104,15 +104,21 @@ void Press::pressBeat(float delta)
 				if (toyCheck(toy))
 				{
 					//	色があっていたらtrue
-					if (this->Collar == toy->getTag())
+					if (this->Color == toy->getTag())
 					{
 						//	成功をの音を鳴らす
-						
 						int id = AudioEngine::play2d("se_atari.ogg");
 						AudioEngine::setVolume(id,3.0f);
 
-						//	おもちゃになる
+						//	おもちゃの素がおもちゃになる
 						toy->Change();
+
+						//	test 連続成功回数を増やす
+						SuccessiveSuccess++;
+						log("Success:%d", SuccessiveSuccess);
+
+						//	レベルが持っている成功カウントも増やす
+						Level->up_Presentcount();
 					}
 					else
 					{
@@ -122,19 +128,15 @@ void Press::pressBeat(float delta)
 						//	失敗品に変える
 						toy->Failed();
 						toy->Change();
+						//	連続成功回数カウントリセット
+						Level->down_level();
+						this->SuccessReset();
 					}
 				}
 			}
 		}
 
-		
 
-		//	おもちゃの素の変換する
-
-
-		//	test 連続成功回数を増やす
-		SuccessiveSuccess++;
-		log("Success:%d", SuccessiveSuccess);
 		//	レベルがマックスなら更新しない
 
 		//	test 連続成功回数が必要数になったらレベルアップしてリセット
@@ -152,7 +154,6 @@ void Press::pressBeat(float delta)
 			this->schedule(CC_CALLBACK_1(Press::pressBeat, this), BeatSpeed, "beat");
 		}
 	
-
 
 
 		Beat = 0;	//	次にこの関数が呼ばれたときに次の拍に進む
@@ -212,9 +213,9 @@ bool Press::init(LevelSystem* level)
 	return true;
 }
 
-int Press::getCollar()
+int Press::getPressColor()
 {
-	return this->Collar;
+	return this->Color;
 }
 
 //	この関数を呼ぶとプレス機が動き始める　初期速度は1.0f
@@ -262,7 +263,7 @@ void Press::levelCheck()
 bool Press::toyCheck(Toy* toy)
 {
 
-	if (toy->getPosition().y < this->getPosition().y + 20 && toy->getPosition().y > this->getPosition().y - 70)	//おもちゃの素があったら
+	if (toy->getPosition().y < this->getPosition().y + 20 && toy->getPosition().y > this->getPosition().y - 130)	//おもちゃの素があったら
 	{
 
 		return true;

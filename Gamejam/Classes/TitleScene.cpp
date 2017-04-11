@@ -13,13 +13,18 @@ bool TitleScene::init()
 		// 基底クラスの初期化が失敗なら、異常終了
 		return false;
 	}
+	//	背景画像
+	Sprite* spr = Sprite::create("title.png");
+	spr->setPosition(640.0f / 2, 960.0f / 2);
+	this->addChild(spr);
 
 	// 毎フレーム更新を有効化
 	scheduleUpdate();
 
-	ui::Button* button = ui::Button::create("Playbutton.png");
-	button->setPosition(Vec2(480, 120));
-	this->addChild(button);
+	ui::Button* button = ui::Button::create("CloseNormal.png");
+	button->setPosition(Vec2(640.0f / 2, 460.0f / 2));
+	button->setScale(4.0f);
+	this->addChild(button,1);
 
 	// クリック時コールバックを登録
 	button->addClickEventListener(CC_CALLBACK_1(TitleScene::onButtonClick, this));

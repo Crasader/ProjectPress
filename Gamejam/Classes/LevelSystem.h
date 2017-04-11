@@ -20,6 +20,7 @@ class LevelSystem : public cocos2d::Node
 		int m_level;				// レベル
 		cocos2d::Sprite* m_lv;		// Lvのスプライト
 		cocos2d::Sprite* m_lvnum;	// 数字のスプライト
+		int m_Presentcount;			//	成功数
 
 	public:
 		static LevelSystem* create();		// creat関数
@@ -28,6 +29,9 @@ class LevelSystem : public cocos2d::Node
 		void set_level(int lv, int count, float beatspd);	// レベルの情報をセットする関数
 		void up_level();									// レベルを上げる関数
 		void down_level();									// レベルを下げる関数
+
+		void up_Presentcount();								//	成功数のカウントアップ
+		int get_Presentcount();								//	現在の成功数
 
 		int get_level() const;								// 現在のレベルを取得
 

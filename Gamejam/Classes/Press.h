@@ -15,7 +15,7 @@ private:
 
 	int SuccessiveSuccess; //	現在の連続成功数
 
-	int Collar;			//	今回要求している色
+	int Color;			//	今回要求している色
 
 	//	色をランダムに決める関数
 	int setRand4();
@@ -28,7 +28,7 @@ public:
 	static Press* create(LevelSystem* level);				//	プレス機のクリエイト関数
 	virtual bool init(LevelSystem* level);				//	プレス機の初期化
 	
-	int getCollar();					//	要求している色を取得
+	int getPressColor();					//	要求している色を取得
 	void startPress();					//	プレス機をstartする　スケジュールon
 	void setBeatSpeed(float beatspeed);	//	プレス機の速度を変更する
 	void SuccessReset();				//	連続成功回数をリセットする

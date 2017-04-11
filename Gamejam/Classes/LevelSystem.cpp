@@ -32,19 +32,24 @@ bool LevelSystem::init()
 	}
 
 	// レベルの情報の初期化
-	m_level_info[4] = { 0 };
+	m_level_info[0] = { 0 };
 
 	// レベルの初期化
 	m_level = 0;
 
+	//	成功数の初期化
+	m_Presentcount = 0;
+
 	// Lvの画像の初期化
 	m_lvnum = Sprite::create("Lv.png");
-	m_lvnum->setPosition(Vec2(115.0f, 150.0f));
-	this->addChild(m_lvnum);
+	m_lvnum->setPosition(Vec2(70.0f, 895.0f));
+	m_lvnum->setScale(1.5f);
+	this->addChild(m_lvnum,1);
 
 	// 数字の画像の初期化
 	m_lv = Sprite::create("one.png");
-	this->addChild(m_lv);
+	m_lv->setScale(2.0f);
+	this->addChild(m_lv,1);
 
 	return true;
 }
@@ -62,15 +67,32 @@ void LevelSystem::set_level(int lv, int count, float beatspd)
 // レベルを上げる関数
 void LevelSystem::up_level()
 {
-	m_level++;
+	if (m_level < 5)
+	{
+		m_level++;
+	}
 }
 
 // レベルを下げる関数
 void LevelSystem::down_level()
 {
-	m_level--;
+	if (m_level > 1)
+	{
+		m_level--;
+	}
 }
 
+
+// レベルを上げる関数
+void LevelSystem::up_Presentcount()
+{
+	m_Presentcount++;
+}
+
+int LevelSystem::get_Presentcount()
+{
+	return m_Presentcount;
+}
 
 // 現在のレベルのを取得する関数
 int LevelSystem::get_level() const
@@ -101,26 +123,28 @@ void LevelSystem::show_level()
 		{
 			case 1:
 				m_lv = Sprite::create("one.png");
-				this->addChild(m_lv);
+			
 				break;
 			case 2:
 				m_lv = Sprite::create("two.png");
-				this->addChild(m_lv);
+		
 				break;
 			case 3:
 				m_lv = Sprite::create("three.png");
-				this->addChild(m_lv);
+				
 				break;
 			case 4:
 				m_lv = Sprite::create("four.png");
-				this->addChild(m_lv);
+			
 				break;
 			case 5:
 				m_lv = Sprite::create("five.png");
-				this->addChild(m_lv);
+				
 				break;
 		}
-		set_pos(150.0f,150.0f);
+		m_lv->setScale(2.0f);
+		set_pos(110.0f,900.0f);
+		this->addChild(m_lv);
 	}
 }
 
